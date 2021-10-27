@@ -2,7 +2,6 @@ const path = require("path");
 const ratings = require(path.resolve("src/data/ratings-data"));
 const e = require("express");
 
-
 function ratingExists(req, res, next) {
   const { ratingId } = req.params;
   const foundRating = ratings.find((rating) => (rating.id = Number(ratingId)));
@@ -14,19 +13,28 @@ function ratingExists(req, res, next) {
   }
 }
 
-//fix this
 function read(req, res) {
-//   console.log(res.locals.rating)
-  res.json({data: res.locals.rating})
+  res.json({ data: res.locals.rating });
 }
 
-function list(req, res) {
+function list(req, res, next) {
   const { noteId } = req.params;
-  const byResult = noteId ? (rating) => noteId == rating.noteId : () => true;
-  res.json({ data: ratings.filter(byResult) });
+  const { ratingId } = req.params;
+
+  if (noteId) {
+    const rating = ratings.filter((rating) => noteId == rating.noteId);
+    if (ratingId) {
+      res.json({ data: rating[0] });
+    } else {
+      res.json({ data: rating });
+    }
+  } else {
+    res.json({ data: ratings });
+  }
 }
 
 module.exports = {
   list,
   read: [ratingExists, read],
-}
+  ratingExists,
+};
