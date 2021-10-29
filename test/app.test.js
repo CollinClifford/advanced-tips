@@ -16,14 +16,14 @@ describe("App", () => {
     notes.splice(0, notes.length);
     ratings.splice(0, ratings.length);
   });
-    
+
   describe("path /notes", () => {
     test("delete returns 405", async () => {
       const response = await request(app)
         .delete(ATTACHED_PATH_NOTES)
         .set("Accept", "application/json")
         .send({ data: { text: "PUT to /notes returns 405" } });
-      
+
       expect(response.status).toBe(405);
       expect(response.body.error).not.toBeUndefined();
     });
@@ -89,7 +89,7 @@ describe("App", () => {
       const response = await request(app)
         .get(`${ATTACHED_PATH_NOTES}/2/ratings`)
         .set("Accept", "application/json");
-      
+
       expect(response.status).toBe(200);
       expect(response.body.data).toEqual(expected);
     });
@@ -137,8 +137,7 @@ describe("App", () => {
 
       notes.push({
         id: 41,
-        text:
-          "path /notes/:notesId/ratings/:ratingId returns 404 if :noteId does not exist",
+        text: "path /notes/:notesId/ratings/:ratingId returns 404 if :noteId does not exist",
       });
 
       ratings.push(expected);
@@ -161,8 +160,7 @@ describe("App", () => {
 
       notes.push({
         id: 51,
-        text:
-          "path /notes/:notesId/ratings/:ratingId returns 404 if :ratingId does not exist",
+        text: "path /notes/:notesId/ratings/:ratingId returns 404 if :ratingId does not exist",
       });
 
       ratings.push(expected);
@@ -175,8 +173,8 @@ describe("App", () => {
       expect(response.body.error).toContain("16");
     });
   });
-  
-  describe("path /ratings", () => {    
+
+  describe("path /ratings", () => {
     test("get returns all ratings", async () => {
       ratings.push(
         {
@@ -185,19 +183,20 @@ describe("App", () => {
           stars: 5,
           comment:
             "This note is awesome! Thanks for the great service. You guys rock!",
-        }, 
+        },
         {
           id: 2,
           noteId: 1,
           stars: 5,
           comment:
             "I would gladly pay over 600 dollars for this note. This note did exactly what you said it does.",
-        }, 
+        },
         {
           id: 3,
           noteId: 2,
           stars: 4,
-          comment: "I don't always clop, but when I do, it's because of this note.",
+          comment:
+            "I don't always clop, but when I do, it's because of this note.",
         }
       );
       const response = await request(app)
@@ -227,7 +226,7 @@ describe("App", () => {
       expect(response.status).toBe(405);
       expect(response.body.error).not.toBeUndefined();
     });
-  
+
     test("post returns 405", async () => {
       const response = await request(app)
         .post(ATTACHED_PATH_RATINGS)
@@ -238,7 +237,7 @@ describe("App", () => {
       expect(response.body.error).not.toBeUndefined();
     });
   });
-  
+
   describe("path /ratings/:ratingId", () => {
     test("get returns one rating", async () => {
       ratings.push({
@@ -255,7 +254,7 @@ describe("App", () => {
       expect(response.status).toBe(200);
       expect(response.body.data).toEqual(ratings[0]);
     });
-    
+
     test("put returns 405", async () => {
       ratings.push({
         id: 1,
@@ -270,7 +269,7 @@ describe("App", () => {
       expect(response.status).toBe(405);
       expect(response.body.error).not.toBeUndefined();
     });
-    
+
     test("post returns 405", async () => {
       ratings.push({
         id: 1,
@@ -285,7 +284,7 @@ describe("App", () => {
       expect(response.status).toBe(405);
       expect(response.body.error).not.toBeUndefined();
     });
-    
+
     test("delete returns 405", async () => {
       ratings.push({
         id: 1,
@@ -301,5 +300,4 @@ describe("App", () => {
       expect(response.body.error).not.toBeUndefined();
     });
   });
-
 });

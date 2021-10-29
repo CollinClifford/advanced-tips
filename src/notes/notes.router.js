@@ -6,8 +6,8 @@ const ratingsRouter = require("../ratings/ratings.router");
 
 router.use(
   "/:noteId/ratings/:ratingId",
+  controller.ratingExists,
   controller.noteExists,
-  rcontroller.ratingExists,
   ratingsRouter
 );
 router.use("/:noteId/ratings", controller.noteExists, ratingsRouter);

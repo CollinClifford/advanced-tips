@@ -4,9 +4,9 @@ const e = require("express");
 
 function ratingExists(req, res, next) {
   const { ratingId } = req.params;
-  const foundRating = ratings.find((rating) => (rating.id = Number(ratingId)));
+  const foundRating = ratings.find((rating) => rating.id === Number(ratingId));
   if (foundRating === undefined) {
-    next({ status: 404, message: `Count id not found: ${countId}` });
+    next({ status: 404, message: `Count id not found: ${ratingId}` });
   } else {
     res.locals.rating = foundRating;
     next();

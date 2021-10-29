@@ -1,5 +1,6 @@
 const path = require("path");
 const notes = require(path.resolve("src/data/notes-data"));
+const ratings = require(path.resolve("src/data/ratings-data"));
 
 function create(req, res) {
   const { data: { text } = {} } = req.body;
@@ -45,6 +46,17 @@ function noteExists(req, res, next) {
   });
 }
 
+function ratingExists(req, res, next) {
+  const { ratingId } = req.params;
+  const foundRating = ratings.find((rating) => rating.id === Number(ratingId));
+  if (foundRating === undefined) {
+    next({ status: 404, message: `Count id not found: ${ratingId}` });
+  } else {
+    res.locals.rating = foundRating;
+    next();
+  }
+}
+
 function read(req, res) {
   const noteId = Number(req.params.noteId);
   const foundNote = notes.find((note) => (note.id = noteId));
@@ -54,11 +66,8 @@ function read(req, res) {
 function update(req, res) {
   const noteId = Number(req.params.noteId);
   const foundNote = notes.find((note) => note.id === noteId);
-
   const { data: { text } = {} } = req.body;
-
   foundNote.text = text;
-
   res.json({ data: foundNote });
 }
 
@@ -69,4 +78,5 @@ module.exports = {
   update: [noteExists, hasText, update],
   delete: destroy,
   noteExists,
+  ratingExists,
 };
